@@ -36,7 +36,7 @@ Permission is granted to any person obtaining a copy of this software and associ
 *   **No Commercial Use:** You may not use the Software for any commercial purpose, including but not limited to selling, leasing, or using it in a commercial product or service.
 
 #### 3. GitHub Specifics
-While the Software is hosted on GitHub, you are permitted to "fork" this repository solely for the purpose of personal study. This fork remains subject to all restrictions mentioned in Section 2.
+While the Software is hosted on GitHub, you are permitted to "fork" this repository solely for the purpose of private use or personal study. This fork remains subject to all restrictions mentioned in Section 2.
 
 #### 4. Reservation of Rights
 The copyright holder reserves the right to modify the terms of this License or to re-license the Software under different terms (including open-source licenses) at any time. Any such changes will apply to all future copies or versions of the Software provided after the date of the change.
