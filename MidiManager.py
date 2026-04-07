@@ -2,11 +2,14 @@ import pytemidi
 import mido
 import time
 
-with pytemidi.Port("Porta Python Virtuale") as port:
-    time.sleep(5)
-    print(mido.get_output_names())
-    print(mido.get_input_names())
-    time.sleep(5)
+class MidiManager:
+    def __init__():
+        pass
+    
+    @staticmethod
+    def getMidiOutputs():
+        return mido.get_output_names()
 
-print(mido.get_output_names())
-print(mido.get_input_names())
+    @staticmethod
+    def getMidiInputs():
+        return mido.get_input_names()

@@ -68,7 +68,7 @@ MAPPING = {
         "23": "/bus/07/mix/on",
         "24": "/bus/08/mix/on"
     },
-    "solo": {
+    "solosw": {
         "1": "/-stat/solosw/17",
         "2": "/-stat/solosw/18",
         "3": "/-stat/solosw/19",
@@ -199,6 +199,7 @@ MAPPING = {
         "24": "/bus/08/config/color"
     },
     "selidx": {
+        "0": "/-stat/selidx/16",
         "1": "/-stat/selidx/17",
         "2": "/-stat/selidx/18",
         "3": "/-stat/selidx/19",
@@ -214,15 +215,14 @@ MAPPING = {
         "13": "/-stat/selidx/29",
         "14": "/-stat/selidx/30",
         "15": "/-stat/selidx/31",
-        "16": "/-stat/selidx/32",
-        "17": "/-stat/selidx/48",
-        "18": "/-stat/selidx/49",
-        "19": "/-stat/selidx/50",
-        "20": "/-stat/selidx/51",
-        "21": "/-stat/selidx/52",
-        "22": "/-stat/selidx/53",
-        "23": "/-stat/selidx/54",
-        "24": "/-stat/selidx/55"
+        "16": "/-stat/selidx/48",
+        "17": "/-stat/selidx/49",
+        "18": "/-stat/selidx/50",
+        "19": "/-stat/selidx/51",
+        "20": "/-stat/selidx/52",
+        "21": "/-stat/selidx/53",
+        "22": "/-stat/selidx/54",
+        "23": "/-stat/selidx/55"
     }, #0-31: Ch 1-32, 48-63: Bus master
     "midiBank": "/-stat/userbank", #0 -> A, 1-> B, 2->C
     "assign": "",
@@ -256,6 +256,8 @@ channel_pbk3 = 15
 
 cc_custom_min = 16
 cc_custom_max = 31
+
+channel_direct_map = 9
 
 max_precision = 16383.0
 fbk1_chans = {
@@ -328,31 +330,37 @@ channel_mute = 10
 channel_solo = 11
 channel_sel = 12
 
+HW_CHANNELS = [ "C17", "C18", "C19", "C20", "C21", "C22", "C23", "C24",
+               "C25", "C26", "C27", "C28", "C29", "C30", "C31", "C32",
+               "B01", "B02", "B03", "B04", "B05", "B06", "B07", "B08"]
+
+REF_SCRIB_STRIP = "RSS"
+REF_FADER = "RFD"
+REF_MUTE = "RMT"
+REF_SOLO = "RSL"
+REF_PAN = "RPN"
+REF_SELECT = "RST"
+REF_EQ = "REQ"
+REF_COMP = "RCM"
+REF_REV = "RVB"
+REF_COLORS = "RCL"
+REF_ICONS = "RIC"
+
 class MidasM32:
-    def __init__(self, ip, inPort=PORT, outPort=PORT):
-        # MIDI Devices IN/OUT
+    def __init__(self, ip, flMidiIn, flMidiOut, midasMidiIn, midasMidiOut, inPort=PORT, outPort=PORT):
         print(mido.get_output_names())
-        print(mido.get_input_names())
+        self.midiOutput = mido.open_output(flMidiIn)
+        self.midiInput = mido.open_input(flMidiOut)
+        self.midasMidiInput = mido.open_input(midasMidiIn) # MIDO open
+        self.midasMidiOutput = mido.open_output(midasMidiOut) # MIDO open
         
-        self.midiOutput = mido.open_output('SFX-Out 2')
-        self.midiInput = mido.open('SFX-In 1')
-        self.midasMidiInput = None # MIDO open
-        self.midasMidiOutput = None # MIDO open
-        
-        msg = mido.Message("note_on", channel=channel_mute, note=1+60)
-        self.midiOutput.send(msg)
+        #msg = mido.Message("note_on", channel=channel_mute, note=1+60)
+        #self.midiOutput.send(msg)
 
         midi_in_client = threading.Thread(target=self.__directInMidiHandler, daemon=True)
         midi_in_client.start()
         midi_out_client = threading.Thread(target=self.__directOutMidiHandler, daemon=True)
         midi_out_client.start()
-
-        '''msg = mido.Message("control_change", channel=15, control=16, value=127)
-        self.midiOutput.send(msg)
-        msg = mido.Message("control_change", channel=15, control=17, value=0)
-        self.midiOutput.send(msg)
-        msg = mido.Message("note_off", channel=11, note=61)
-        self.midiOutput.send(msg)'''
 
         # Sender
         sender_parser = argparse.ArgumentParser()
@@ -414,25 +422,23 @@ class MidasM32:
     
     @staticmethod
     def mapFaderToMidas(fl_value):
-        '''if fl_value < 0.00331968516111374:
-            pass
-        elif fl_value >= 0.00331968516111374 and fl_value < 0.0916703343391418:
-            pass
-        elif fl_value >= 0.0916703343391418 and fl_value < 0.4757713794708250:
-            pass
-        elif fl_value >= 0.4757713794708250:
-            pass'''
+        if fl_value < 0.00331968516111373:
+            return MidasM32.remap(fl_value, 0.0, 0.00331968516111373, 0.0, 0.625)
+        elif fl_value >= 0.00331968516111373 and fl_value < 0.0916703343391417:
+            return MidasM32.remap(fl_value, 0.00331968516111374, 0.0916703343391417, 0.0625, 0.25)
+        elif fl_value >= 0.0916703343391417 and fl_value < 0.4757713794708249:
+            return MidasM32.remap(fl_value, 0.0916703343391418, 0.4757713794708249, 0.25, 0.50)
+        elif fl_value >= 0.4757713794708249 and fl_value < 0.7999999999999999:
+            return MidasM32.remap(fl_value , 0.4757713794708250, 0.7999999999999999, 0.50, 0.7525)
+        elif fl_value >= 0.7999999999999999: # F0r 0 dB alignment
+            return MidasM32.remap(fl_value, 0.8, 1.0, 0.7525, 1.0)
     
     @staticmethod
-    def mapPanpotToFL(midas_value):
-        if midas_value < 0:
-            return MidasM32.remap(midas_value, 0.0, 0.4999999999999999, -100.000, -0.0000000000000001)
-        elif midas_value >= 0:
-            return MidasM32.reamp(midas_value, 0.5, 1.0, 0.0, 100.000)
-    
-    @staticmethod
-    def mapPanpotToMidas(self):
-        pass
+    def mapPanpotToMidas(fl_value):
+        if fl_value < 0.0:
+            return MidasM32.remap(fl_value, -1.0, -0.000000000000001, 0.0, 0.5)
+        elif fl_value >= 0.0:
+            return MidasM32.remap(fl_value, 0.0, 1.0, 0.5, 1.0)
         
     def __periodicSubscription(self):
         while True:
@@ -491,7 +497,7 @@ class MidasM32:
                         ctrl = pbk2_chans[inti]
 
                     # Sending value
-                    val = int(MidasM32.mapPanpotToFL(args[0]) * max_precision)
+                    val = int(args[0] * max_precision)
                     msb = (val >> 7) & 0x7F
                     lsb = val & 0x7F
                     msg = mido.Message("control_change", channel=chan, control=ctrl[0], value=msb)
@@ -509,27 +515,85 @@ class MidasM32:
                     pass
     
     def __statHandler(self, address, *args):
-        fnc = address.split("/")[-1]
+        fnc = address.split("/")[2]
 
-        for i in MAPPING[fnc].keys():
-            if MAPPING[fnc][i] == address:
-                if fnc == "solo":
+        if fnc in MAPPING.keys():
+            for i in MAPPING[fnc].keys():
+                if fnc == "solosw" and MAPPING[fnc][i] == address:
                     # To distinguish if it's on or off solo
-                    if args[0] == 1:
+                    if args[0] == 0:
                         msg = mido.Message("note_on", channel=channel_solo, note=int(i)+60)
-                    elif args[0] == 0:
+                    elif args[0] == 1:
                         msg = mido.Message("note_off", channel=channel_solo, note=int(i)+60)
                     self.midiOutput.send(msg)
-                elif fnc == "selidx":
-                    msg = mido.Message("note_on", channel=channel_sel, note=int(i)+60)
+                elif fnc == "selidx" and int(MAPPING[fnc][i].split("/")[-1]) == args[0]:
+                    msg = mido.Message("note_on", channel=channel_sel, note=int(i)+61)
                     self.midiOutput.send(msg)
     
     def __directInMidiHandler(self):
         for msg in self.midasMidiInput:
             self.midiOutput.send(msg)
     
+    # Receive data from FL studio and send it to Midas
     def __directOutMidiHandler(self):
         for msg in self.midiInput:
-            self.midasMidiOutput.send(msg)
-    
-MidasM32("192.168.1.152")
+            if msg.type == "sysex":
+                data = ("".join(chr(b) for b in msg.data[:]))
+
+                # Common parsing for all the possible messages
+                type = data[0:3]
+                data = data[3:]
+                channel_type = None
+                channel_nr = None
+
+                if data[0] == "C":
+                    channel_type = "ch"
+                elif data[0] == "B":
+                    channel_type = "bus"
+                channel_nr = data[1:3]
+
+                data = data[3:]
+
+                #== SCRIBBLE STRIP Update ==
+                if type == REF_SCRIB_STRIP:
+                    self.client.send_message(f"/{channel_type}/{channel_nr}/config/name", data[0:11])
+                
+                #== FADER Update ==
+                elif type == REF_FADER:
+                    fader_volume = MidasM32.mapFaderToMidas(int(data) / max_precision)
+                    self.client.send_message(f"/{channel_type}/{channel_nr}/mix/fader", fader_volume)
+
+                #== SELECTED Update ==
+                elif type == REF_SELECT:
+                    channel_nr = int(channel_nr) - 1
+                    if channel_type == "bus":
+                        channel_nr = int(channel_nr) + 48
+                    self.client.send_message(f"/-stat/selidx", channel_nr)
+                
+                #== MUTE Update ==
+                elif type == REF_MUTE:
+                    mute = int(data)
+                    self.client.send_message(f"/{channel_type}/{channel_nr}/mix/on", int(not mute))
+                
+                #== SOLO Update ==
+                elif type == REF_SOLO:
+                    solo = int(data)
+                    if channel_type == "bus":
+                        channel_nr = int(channel_nr) + 48
+                    self.client.send_message(f"/-stat/solosw/{channel_nr}", int(solo))
+                
+                #== PAN Update
+                elif type == REF_PAN:
+                    track_pan = MidasM32.mapPanpotToMidas(int(data) / max_precision)
+                    self.client.send_message(f"/{channel_type}/{channel_nr}/mix/pan", track_pan)
+                
+                #== COLORS Update
+                elif type == REF_COLORS:
+                    self.client.send_message(f"/{channel_type}/{channel_nr}/config/color", data)
+
+                #== ICONS Update
+                elif type == REF_ICONS:
+                    self.client.send_message(f"/{channel_type}/{channel_nr}/config/icon", data)
+            
+            elif msg.type == "control_change" and msg.channel == channel_direct_map:
+                self.midasMidiOutput.send(msg)

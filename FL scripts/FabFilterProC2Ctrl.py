@@ -1,5 +1,5 @@
 import plugins
-import Utils
+from Utils import Utils
 
 COMPRESSOR_STYLES = [0, 0.12, 0.28, 0.42, 0.57, 0.71, 0.85, 1]
 '''
@@ -30,23 +30,39 @@ class FabFilterProC2Ctrl:
 
     @staticmethod
     def setThreshold(selected, slotIndex, value):
-        plugins.setParamValue(Utils.mapMidiCCTo01(value), "Threshold", selected, slotIndex)
+        plugins.setParamValue(Utils.mapMidiCCTo01(value), 1, selected, slotIndex)
+
+    @staticmethod
+    def getThreshold(selected, slotIndex):
+        return plugins.getParamValue(1, selected, slotIndex)
 
     @staticmethod
     def setRatio(selected, slotIndex, value):
-        plugins.setParamValue(Utils.mapMidiCCTo01(value), "Ratio", selected, slotIndex)
+        plugins.setParamValue(Utils.mapMidiCCTo01(value), 2, selected, slotIndex)
+
+    @staticmethod
+    def getRatio(selected, slotIndex):
+        return plugins.getParamValue(2, selected, slotIndex)
 
     @staticmethod
     def setAttack(selected, slotIndex, value):
-        plugins.setParamValue(Utils.mapMidiCCTo01(value), "Attack", selected, slotIndex)
+        plugins.setParamValue(Utils.mapMidiCCTo01(value), 5, selected, slotIndex)
+
+    @staticmethod
+    def getAttack(selected, slotIndex):
+        return plugins.getParamValue(5, selected, slotIndex)
 
     @staticmethod
     def setRelease(selected, slotIndex, value):
-        plugins.setParamValue(Utils.mapMidiCCTo01(value), "Release", selected, slotIndex)
+        plugins.setParamValue(Utils.mapMidiCCTo01(value), 6, selected, slotIndex)
+
+    @staticmethod
+    def getRelease(selected, slotIndex):
+        return plugins.getParamValue(6, selected, slotIndex)
 
     @staticmethod
     def switchCompressorStyle(selected, slotIndex):
-        current_value = plugins.getParamValue("Style", selected, slotIndex)
+        current_value = plugins.getParamValue(0, selected, slotIndex)
         
         array_len = len(COMPRESSOR_STYLES)
         diff = 2
@@ -59,6 +75,6 @@ class FabFilterProC2Ctrl:
                 style_index = i
         
         if style_index < array_len - 1:
-            return COMPRESSOR_STYLES[i+1]
+            return COMPRESSOR_STYLES[style_index+1]
         else:
             return COMPRESSOR_STYLES[0]

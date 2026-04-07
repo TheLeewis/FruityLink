@@ -1,0 +1,10 @@
+{
+    "ipc1": "192",
+    "ipc2": "168",
+    "ipc3": "1",
+    "ipc4": "27",
+    "flIn": "FLStudio In 1",
+    "flOut": "FLStudio In 0",
+    "midasIn": "Microsoft GS Wavetable Synth 0",
+    "midasOut": "FLStudio In 0"
+}
