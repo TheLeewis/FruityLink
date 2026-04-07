@@ -27,6 +27,9 @@ I'm Luigi a Computer Science and Engineering student specializing in Music and A
 ## 🚀 Usage
 
 Further information coming soon.
+<p align="center">
+  <img src="src/GUI_MAIN.png" width="600">
+</p>
 
 ## ⬇️ Installation
 
