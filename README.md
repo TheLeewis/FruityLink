@@ -35,6 +35,21 @@ Further information coming soon.
 
 Further information coming soon.
 
+## 🧭 Roadmap
+
+- [x] Core fader/panpot controls via OSC
+- [x] Enable assign section controls via MIDI
+- [x] Add feedback syncronization from the software to the controller
+- [x] Add GUI for better user experience
+- [x] Persistence for the GUI parameters
+- [ ] Release via single executable file
+- [ ] Mapping for prev/next plugin preset of the plugin in the currently focused window
+- [ ] Automatic assignment of the controls in the assign section via OSC (to avoid having to do it manually)
+
+## 💬 Contributing
+- **Bug Fixes**: If you find a bug, please [open an issue](https://github.com/TheLeewis/FruityLink/issues/new/choose) describing the steps to reproduce it.
+- **Feature Requests**: Have a suggestion? Open an issue to discuss about it.
+
 ## ©️ Copyright
 Copyright© 2026.</br>
 #### 1. Permission to View and Copy
@@ -46,7 +61,7 @@ Permission is granted to any person obtaining a copy of this software and associ
 *   **No Commercial Use:** You may not use the Software for any commercial purpose, including but not limited to selling, leasing, or using it in a commercial product or service.
 
 #### 3. GitHub Specifics
-While the Software is hosted on GitHub, you are permitted to "fork" this repository solely for the purpose of private use or personal study. This fork remains subject to all restrictions mentioned in Section 2.
+While the Software is hosted on GitHub, you are permitted to "fork" this repository solely for the permitted purposes only. This fork remains subject to all restrictions mentioned in Section 2.
 
 #### 4. Reservation of Rights
 The copyright holder reserves the right to modify the terms of this License or to re-license the Software under different terms (including open-source licenses) at any time. Any such changes will apply to all future copies or versions of the Software provided after the date of the change.
@@ -55,4 +70,4 @@ The copyright holder reserves the right to modify the terms of this License or t
 THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #### 6. Non affiliation
-This project is NOT affiliated, associated, authorized, endorsed by, or in any way officially connected with Image Line and Behringer. All product and company names are trademarks™ or registered® trademarks of their respective holders.
+This project is NOT affiliated, associated, authorized, endorsed by, or in any way officially connected with Image Line, Behringer or Mackie. All product and company names are trademarks™ or registered® trademarks of their respective holders.
