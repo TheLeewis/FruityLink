@@ -1,11 +1,6 @@
-<img src="src/FruityLink.svg" height="200" style="align:center">
-
-## 🌟 Highlights
-
-- Some functionality made easy!
-- This problem handled
-- etc.
-
+<p align="center">
+  <img src="src/FruityLink.svg" height="100">
+</p>
 
 ## ℹ️ Overview
 
@@ -30,12 +25,4 @@ Mention who you are and link to your GitHub or organization's website.
 
 ## ⬇️ Installation
 
-Simple, understandable installation instructions!
-
-```bash
-pip install my-package
-```
-
-And be sure to specify any other minimum requirements like Python versions or operating systems.
-
-*You may be inclined to add development instructions here, don't.*
+## ©️ Copyright
