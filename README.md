@@ -2,7 +2,9 @@
   <img src="src/FruityLink.svg" height="50">
 </p>
 <div align="center">
-  
+
+![GitHub](https://img.shields.io/badge/GitHub-181717?style=flat&logo=github&logoColor=white)
+![Release](https://img.shields.io/github/v/release/TheLeewis/FruityLink)
 ![Python](https://img.shields.io/badge/Python-3776AB?style=flat&logo=python&logoColor=white)
 ![Windows](https://img.shields.io/badge/Windows-0078D6?style=flat&logo=windows&logoColor=white)
 
