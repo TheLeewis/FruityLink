@@ -1,4 +1,4 @@
-## FruityLink
+<img src="src/FruityLink.svg" height="200" style="align:center">
 
 ## 🌟 Highlights
 
