@@ -1,29 +1,36 @@
 <p align="center">
   <img src="src/FruityLink.svg" height="50">
 </p>
+<div align="center">
+  
+![Python](https://img.shields.io/badge/Python-3776AB?style=flat&logo=python&logoColor=white)
+![Windows](https://img.shields.io/badge/Windows-0078D6?style=flat&logo=windows&logoColor=white)
+
+</div>
 
 ## ℹ️ Overview
 
-A paragraph explaining your work, who you are, and why you made it.
+**FruityLink** is a specialized bridge designed to integrate the **Midas M32** digital console with **FL Studio**. 
+While most DAW integrations for the M32 are limited to basic Mackie Control (MCU) on 8 faders, FruityLink unlocks the console's full potential by mapping all **24 motorized faders** and the **lateral assign section** directly to the FL Studio mixer and transport controls.
 
+#### Key Capabilities:
+*   **Extended Surface:** Full bi-directional control of 24 tracks simultaneously across the M32 fader banks.
+*   **Tactile Workflow:** Use the M32’s physical buttons and encoders to manage FL Studio’s lateral assignable parameters.
+*   **Motorized Feedback:** High-precision synchronization between the DAW software and the Midas hardware.
+*   **Optimized for FL Studio:** Custom MIDI scripting tailored specifically for the Image-Line workflow.
 
-### ✍️ Authors
+## ✍️ Authors
 
-Mention who you are and link to your GitHub or organization's website.
+I'm Luigi a Computer Science and Engineering student specializing in Music and Acoustic Engineering. I'm passionate about music technology, always trying to design and implement new ideas.
 
 
 ## 🚀 Usage
 
-*Show off what your software looks like in action! Try to limit it to one-liners if possible and don't delve into API specifics.*
-
-```py
->>> import mypackage
->>> mypackage.do_stuff()
-'Oh yeah!'
-```
-
+Further information coming soon.
 
 ## ⬇️ Installation
+
+Further information coming soon.
 
 ## ©️ Copyright
 Copyright© 2026.</br>
