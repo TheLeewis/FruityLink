@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="src/FruityLink.svg" height="100">
+  <img src="src/FruityLink.svg" height="50">
 </p>
 
 ## ℹ️ Overview
