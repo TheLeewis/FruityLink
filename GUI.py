@@ -13,8 +13,9 @@ class GUI:
         self.app = ctk.CTk()
         self.app.geometry("600x550")
         self.app.title("FruityLink")
+        self.app.iconbitmap("./src/FruityLink.ico")
         self.app.grid_columnconfigure(0, weight=1)
-        self.app.grid_rowconfigure((0, 1, 2), weight=1)
+        self.app.grid_rowconfigure((0, 1, 2, 3), weight=1)
         self.app.resizable(False, False)
 
         self.vcmd = (self.app.register(GUI.validateIpInput), '%P')
@@ -36,11 +37,11 @@ class GUI:
         self.setMemoryValues()
 
         self.app.mainloop()
-    
+
     def createOSCFrame(self):
         osc_frame = ctk.CTkFrame(master=self.app, width=500, height=130)
         osc_frame.grid_propagate(False)
-        osc_frame.grid(row=0, column=0, padx=20, pady=(20, 10), sticky="nsew")
+        osc_frame.grid(row=1, column=0, padx=20, pady=(20, 10), sticky="nsew")
 
         osc_frame.grid_columnconfigure((0, 1, 2, 3), weight=1)
         osc_frame.grid_rowconfigure((0, 1), weight=0)
@@ -64,7 +65,7 @@ class GUI:
     def createMIDIFrame(self):
         midi_frame = ctk.CTkFrame(master=self.app, width=500, height=200)
         midi_frame.grid_propagate(False)
-        midi_frame.grid(row=1, column=0, padx=20, pady=(10, 10), sticky="nsew")
+        midi_frame.grid(row=2, column=0, padx=20, pady=(10, 10), sticky="nsew")
 
         midi_frame.grid_columnconfigure((0, 1), weight=1)
         midi_frame.grid_rowconfigure((0, 1, 3), weight=0)
@@ -121,7 +122,7 @@ class GUI:
     def createSubmitFrame(self):
         submit_frame = ctk.CTkFrame(master=self.app, width=500, height=100)
         submit_frame.grid_propagate(False)
-        submit_frame.grid(row=2, column=0, padx=20, pady=(10, 20), sticky="nsew")
+        submit_frame.grid(row=3, column=0, padx=20, pady=(10, 20), sticky="nsew")
 
         submit_frame.grid_columnconfigure((0, 1), weight=1, uniform="equal")
         submit_frame.grid_rowconfigure((0, 1), weight=0)
@@ -129,12 +130,15 @@ class GUI:
         img = Image.open("./src/wrench-adjustable-circle.png")  # or your image path
         icon = ctk.CTkImage(img, size=(18, 18))
 
+        img = Image.open("./src/x-circle.png")
+        icon2 = ctk.CTkImage(img, size=(18, 18))
+
         self.log = ctk.CTkLabel(submit_frame, text="", text_color="#E85028")
         self.log.grid(row=0, column=0, padx=20, pady=(20, 10), sticky="nw", columnspan=2)
 
         button = ctk.CTkButton(master=submit_frame, text="Set", width=30, height=30, image=icon, compound="left", text_color="black", fg_color="#E85028", hover_color="#FB9244", cursor="hand2", command=self.submitCallback)
         button.grid(row=1, column=0, padx=(20, 10), pady=(10, 20), sticky="ew")
-        button = ctk.CTkButton(master=submit_frame, text="Unset", width=30, height=30, image=icon, compound="left", text_color="white", fg_color="#515151", hover_color="#8E8E8E", cursor="hand2", command=self.stopCallback)
+        button = ctk.CTkButton(master=submit_frame, text="Unset", width=30, height=30, image=icon2, compound="left", text_color="white", fg_color="#515151", hover_color="#8E8E8E", cursor="hand2", command=self.stopCallback)
         button.grid(row=1, column=1, padx=(10, 20), pady=(10, 20), sticky="ew")
 
     def setMemoryValues(self):
