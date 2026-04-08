@@ -11,7 +11,7 @@ class GUI:
     def __init__(self):
         # Main app configuration
         self.app = ctk.CTk()
-        self.app.geometry("600x550")
+        self.app.geometry("600x600")
         self.app.title("FruityLink")
         self.app.iconbitmap("./src/FruityLink.ico")
         self.app.grid_columnconfigure(0, weight=1)
@@ -30,6 +30,7 @@ class GUI:
         self.worker_process = None
         self.midi_in = None
         self.midi_out = None
+        self.is_midi_on_midas_on = ctk.IntVar(value=1)
 
         self.createOSCFrame()
         self.createMIDIFrame()
@@ -63,61 +64,77 @@ class GUI:
         self.entry4.grid(row=2, column=3, padx=(10, 20), pady=(10, 20), sticky="nsew")
     
     def createMIDIFrame(self):
-        midi_frame = ctk.CTkFrame(master=self.app, width=500, height=200)
+        midi_frame = ctk.CTkFrame(master=self.app, width=500, height=250)
         midi_frame.grid_propagate(False)
         midi_frame.grid(row=2, column=0, padx=20, pady=(10, 10), sticky="nsew")
 
         midi_frame.grid_columnconfigure((0, 1), weight=1)
-        midi_frame.grid_rowconfigure((0, 1, 3), weight=0)
-        midi_frame.grid_rowconfigure((2, 4), weight=1)
+        midi_frame.grid_rowconfigure((0, 1, 2, 4), weight=0)
+        midi_frame.grid_rowconfigure((3, 5), weight=1)
 
         # Get Options Data
         self.midi_in = MidiManager.getMidiInputs()
         self.midi_out = MidiManager.getMidiOutputs()
 
         label = ctk.CTkLabel(master=midi_frame, text="MIDI Configuration", font=("Helvetica", 14, "bold"))
-        label.grid(row=0, column=0, padx=20, pady=10, sticky="nw", columnspan=4)
+        label.grid(row=0, column=0, padx=20, pady=10, sticky="nw", columnspan=2)
 
         label = ctk.CTkLabel(master=midi_frame, text="FL In Interface")
-        label.grid(row=1, column=0, padx=20, sticky="nw")
+        label.grid(row=2, column=0, padx=20, sticky="nw")
 
         label = ctk.CTkLabel(master=midi_frame, text="FL Out Interface")
-        label.grid(row=1, column=1, padx=20, sticky="nw")
+        label.grid(row=2, column=1, padx=20, sticky="nw")
 
         self.comboFlIn = ctk.CTkComboBox(
             master=midi_frame,
             values=self.midi_out,
             command=None
         )
-        self.comboFlIn.grid(padx=20, pady=0, row=2, column=0, sticky="ew")
+        self.comboFlIn.grid(padx=20, pady=0, row=3, column=0, sticky="ew")
 
         self.comboFlOut = ctk.CTkComboBox(
             master=midi_frame,
             values=self.midi_in,
             command=None
         )
-        self.comboFlOut.grid(padx=20, pady=0, row=2, column=1, sticky="ew")
+        self.comboFlOut.grid(padx=20, pady=0, row=3, column=1, sticky="ew")
+
+        # MIDAS use MIDI checkbox
+        self.midasMIDICheckbox = ctk.CTkSwitch(
+            master=midi_frame,
+            text="Enable MIDI assign section on Midas",
+            progress_color="#E85028",
+            fg_color="grey50",
+            button_hover_color="#FB9244",
+            button_color="#fafafa",
+            variable=self.is_midi_on_midas_on,
+            onvalue=1,
+            offvalue=0,
+            state="enabled",
+            command=self.midasMIDIEnableCallback
+        )
+        self.midasMIDICheckbox.grid(row=1, column=0, padx=20, pady=(0, 10), sticky="nw", columnspan=2)
 
         # Second row for MIDAS ports configuration
         label = ctk.CTkLabel(master=midi_frame, text="MIDAS In Interface")
-        label.grid(row=3, column=0, padx=20, sticky="nw")
+        label.grid(row=4, column=0, padx=20, sticky="nw")
 
         label = ctk.CTkLabel(master=midi_frame, text="MIDAS Out Interface")
-        label.grid(row=3, column=1, padx=20, sticky="nw")
+        label.grid(row=4, column=1, padx=20, sticky="nw")
 
         self.comboMidasIn = ctk.CTkComboBox(
             master=midi_frame,
             values=self.midi_out,
-            command=None
+            command=None,
         )
-        self.comboMidasIn.grid(padx=20, pady=0, row=4, column=0, sticky="ew")
+        self.comboMidasIn.grid(padx=20, pady=(0, 10), row=5, column=0, sticky="ew")
 
         self.comboMidasOut = ctk.CTkComboBox(
             master=midi_frame,
             values=self.midi_in,
             command=None
         )
-        self.comboMidasOut.grid(padx=20, pady=0, row=4, column=1, sticky="ew")
+        self.comboMidasOut.grid(padx=20, pady=(0, 10), row=5, column=1, sticky="ew")
 
     def createSubmitFrame(self):
         submit_frame = ctk.CTkFrame(master=self.app, width=500, height=100)
@@ -171,6 +188,16 @@ class GUI:
         if P == "" or (P.isdigit() and int(P) >= 0 and int(P) <=255):
             return True
         return False
+    
+    def midasMIDIEnableCallback(self):
+        value = self.midasMIDICheckbox.get()
+
+        if value:
+            self.comboMidasIn.configure(state="normal")
+            self.comboMidasOut.configure(state="normal")
+        else:
+            self.comboMidasIn.configure(state="disabled")
+            self.comboMidasOut.configure(state="disabled")
 
     def submitCallback(self):
         ip = ""
@@ -201,10 +228,12 @@ class GUI:
         
         flMidiIn = self.comboFlIn.get()
         flMidiOut = self.comboFlOut.get()
+
+        midasMidiOn = self.midasMIDICheckbox.get()
         midasMidiIn = self.comboMidasIn.get()
         midasMidiOut = self.comboMidasOut.get()
 
-        self.worker_process = multiprocessing.Process(target=MidasM32, daemon=True, args=(ip, flMidiIn, flMidiOut, midasMidiIn, midasMidiOut))
+        self.worker_process = multiprocessing.Process(target=MidasM32, daemon=True, args=(ip, flMidiIn, flMidiOut, midasMidiIn, midasMidiOut, midasMidiOn))
         self.worker_process.start()
 
         self.saveMemoryValues()

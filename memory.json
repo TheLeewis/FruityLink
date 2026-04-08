@@ -4,7 +4,7 @@
     "ipc3": "1",
     "ipc4": "27",
     "flIn": "FLStudio In 1",
-    "flOut": "FLStudio In 0",
+    "flOut": "FLStudio Out 1",
     "midasIn": "Microsoft GS Wavetable Synth 0",
-    "midasOut": "FLStudio In 0"
+    "midasOut": "FLStudio Out 1"
 }

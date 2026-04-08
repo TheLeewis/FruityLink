@@ -347,18 +347,18 @@ REF_COLORS = "RCL"
 REF_ICONS = "RIC"
 
 class MidasM32:
-    def __init__(self, ip, flMidiIn, flMidiOut, midasMidiIn, midasMidiOut, inPort=PORT, outPort=PORT):
-        print(mido.get_output_names())
+    def __init__(self, ip, flMidiIn, flMidiOut, midasMidiIn, midasMidiOut, midasMidiOn, inPort=PORT, outPort=PORT):
+        print("started")
+        self.midasMidiOn = midasMidiOn
         self.midiOutput = mido.open_output(flMidiIn)
         self.midiInput = mido.open_input(flMidiOut)
-        self.midasMidiInput = mido.open_input(midasMidiIn) # MIDO open
-        self.midasMidiOutput = mido.open_output(midasMidiOut) # MIDO open
-        
-        #msg = mido.Message("note_on", channel=channel_mute, note=1+60)
-        #self.midiOutput.send(msg)
 
-        midi_in_client = threading.Thread(target=self.__directInMidiHandler, daemon=True)
-        midi_in_client.start()
+        if self.midasMidiOn:
+            self.midasMidiInput = mido.open_input(midasMidiIn) # MIDO open
+            self.midasMidiOutput = mido.open_output(midasMidiOut) # MIDO open
+            midi_in_client = threading.Thread(target=self.__directInMidiHandler, daemon=True)
+            midi_in_client.start()
+        
         midi_out_client = threading.Thread(target=self.__directOutMidiHandler, daemon=True)
         midi_out_client.start()
 
@@ -595,5 +595,5 @@ class MidasM32:
                 elif type == REF_ICONS:
                     self.client.send_message(f"/{channel_type}/{channel_nr}/config/icon", data)
             
-            elif msg.type == "control_change" and msg.channel == channel_direct_map:
+            elif msg.type == "control_change" and msg.channel == channel_direct_map and self.midasMidiOn:
                 self.midasMidiOutput.send(msg)
