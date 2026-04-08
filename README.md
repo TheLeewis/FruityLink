@@ -25,13 +25,21 @@ While most DAW integrations for the M32 are limited to basic Mackie Control (MCU
 
 I'm Luigi a Computer Science and Engineering student specializing in Music and Acoustic Engineering. I'm passionate about music technology and always trying to design and implement new ideas.
 
-
 ## 🚀 Usage
+#### DAW Configuration
 
-Further information coming soon.
+#### Midas M32 Configuration
+
+#### FruityLink COnfiguration
 <p align="center">
   <img src="src/GUI_MAIN.png" width="600">
 </p>
+
+Double click on the downloaded executable (.exe) file.<br/>
+
+The user interface is made to keep it simple. All you need to do is to insert the ip address of the MIDAS M32 and select the correct MIDI input/output interfaces to/from the DAW and the mixer respectively.<br/>
+
+Then simply click "set" and leave the application running in background. You're all set and ready to go.
 
 ## ⬇️ Installation
 
