@@ -25,14 +25,36 @@ While most DAW integrations for the M32 are limited to basic Mackie Control (MCU
 
 I'm Luigi a Computer Science and Engineering student specializing in Music and Acoustic Engineering. I'm passionate about music technology and always trying to design and implement new ideas.
 
+## ⬇️ Installation
+
+Further information coming soon.
+
 ## 🚀 Usage
 #### DAW Configuration
+<p align="center">
+  <kbd>
+    <img src="src/FLStudio_config.png" width="600">
+  </kbd>
+</p>
+
+1. Create two virtual MIDI interfaces (on Windows you can use for example [loopMIDI](https://www.tobias-erichsen.de/software/loopmidi.html) by Tobias Erichsen)
+2. Assign one interface to the FL Studio input and one to the FL Studio output (in the FL Studio Audio/MIDI settings) along with an arbitrary port number. These ones need to be the same selected later in the FruityLink software as the communication interfaces with the DAW.
+3. Check the "Enable" checkbox
+4. Assign Midas M32 as a controller type (if you do not have this device type, look at the installation instructions up here)
 
 #### Midas M32 Configuration
+(Image coming soon)
+1. Connect the mixer with an ethernet cable to the same LAN of the PC you are using and assign an IP address the way you prefere (static, DHCP, link local)
+2. Connect the mixer also directly to the PC via USB cable/MIDI cable to enable sending/receiving midi
 
-#### FruityLink COnfiguration
+Remember that the 24 channels (faders, panpot, mute, solo, select) that are mapped as DAW controls are the 17-32 channels and 1-8 mixbus. In this way the first 16 input channels are left for use as recording interface or monitoring, and all the other channels (mixbus 9-16, matrix, Main LR, Main C) remain untouched.
+(Further information on how to configure the midi assign section coming soon)
+
+#### FruityLink Configuration
 <p align="center">
-  <img src="src/GUI_MAIN.png" width="600">
+  <kbd>
+    <img src="src/GUI_MAIN.png" width="600">
+  </kbd>
 </p>
 
 Double click on the downloaded executable (.exe) file.<br/>
@@ -40,10 +62,6 @@ Double click on the downloaded executable (.exe) file.<br/>
 The user interface is made to keep it simple. All you need to do is to insert the ip address of the MIDAS M32 and select the correct MIDI input/output interfaces to/from the DAW and the mixer respectively.<br/>
 
 Then simply click "set" and leave the application running in background. You're all set and ready to go.
-
-## ⬇️ Installation
-
-Further information coming soon.
 
 ## 🧭 Roadmap
 
