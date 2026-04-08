@@ -27,7 +27,10 @@ I'm Luigi a Computer Science and Engineering student specializing in Music and A
 
 ## ⬇️ Installation
 
-Further information coming soon.
+1. Download the FruityLink executable and keep it wherever you want
+2. Clone the `FL scripts` folder from this repo
+3. Create a folder called `Midas M32` into the path `C:\Users\<username>\Documents\Image-Line\FL Studio\Settings\Hardware`
+4. Copy all the scripts from `FL scripts` to `C:\Users\<username>\Documents\Image-Line\FL Studio\Settings\Hardware\Midas M32`
 
 ## 🚀 Usage
 #### DAW Configuration
@@ -47,7 +50,8 @@ Further information coming soon.
 1. Connect the mixer with an ethernet cable to the same LAN of the PC you are using and assign an IP address the way you prefere (static, DHCP, link local)
 2. Connect the mixer also directly to the PC via USB cable/MIDI cable to enable sending/receiving midi
 
-Remember that the 24 channels (faders, panpot, mute, solo, select) that are mapped as DAW controls are the 17-32 channels and 1-8 mixbus. In this way the first 16 input channels are left for use as recording interface or monitoring, and all the other channels (mixbus 9-16, matrix, Main LR, Main C) remain untouched.
+Remember that the 24 channels (faders, panpot, mute, solo, select) that are mapped as DAW controls are the 17-32 channels and 1-8 mixbus. In this way the first 16 input channels are left for use as recording interface or monitoring, and all the other channels (mixbus 9-16, matrix, Main LR, Main C) remain untouched.<br/>
+
 (Further information on how to configure the midi assign section coming soon)
 
 #### FruityLink Configuration
