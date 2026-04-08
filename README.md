@@ -44,7 +44,7 @@ Further information coming soon.
 - [x] Add feedback syncronization from the software to the controller
 - [x] Add GUI for better user experience
 - [x] Persistence for the GUI parameters
-- [ ] Release via single executable file
+- [x] Release via single executable file
 - [ ] Mapping for prev/next plugin preset of the plugin in the currently focused window
 - [ ] Automatic assignment of the controls in the assign section via OSC (to avoid having to do it manually)
 
