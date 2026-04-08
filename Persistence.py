@@ -40,6 +40,8 @@ class Persistence:
     def getSettings():
         path = Persistence.getFilePath()
 
-        if os.path.exists(path):
+        if path is not None and os.path.exists(path):
             with open(path, "r", encoding="utf-8") as f:
                 return json.load(f)
+        else:
+            return None

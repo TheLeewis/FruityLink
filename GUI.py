@@ -6,6 +6,7 @@ import multiprocessing
 from MidasM32 import MidasM32
 from MidiManager import MidiManager
 from Persistence import Persistence
+from Utils import Utils
 
 class GUI:
     def __init__(self):
@@ -13,7 +14,7 @@ class GUI:
         self.app = ctk.CTk()
         self.app.geometry("600x600")
         self.app.title("FruityLink")
-        self.app.iconbitmap("./src/FruityLink.ico")
+        self.app.iconbitmap(Utils.resourcePath("./src/FruityLink.ico"))
         self.app.grid_columnconfigure(0, weight=1)
         self.app.grid_rowconfigure((0, 1, 2, 3), weight=1)
         self.app.resizable(False, False)
@@ -144,10 +145,10 @@ class GUI:
         submit_frame.grid_columnconfigure((0, 1), weight=1, uniform="equal")
         submit_frame.grid_rowconfigure((0, 1), weight=0)
 
-        img = Image.open("./src/wrench-adjustable-circle.png")  # or your image path
+        img = Image.open(Utils.resourcePath("./src/wrench-adjustable-circle.png"))  # or your image path
         icon = ctk.CTkImage(img, size=(18, 18))
 
-        img = Image.open("./src/x-circle.png")
+        img = Image.open(Utils.resourcePath("./src/x-circle.png"))
         icon2 = ctk.CTkImage(img, size=(18, 18))
 
         self.log = ctk.CTkLabel(submit_frame, text="", text_color="#E85028")
@@ -161,15 +162,16 @@ class GUI:
     def setMemoryValues(self):
         vals = Persistence.getSettings()
         
-        if vals["ipc1"] and self.validateIpInput(vals["ipc1"]): self.entry1.insert(0, vals["ipc1"])
-        if vals["ipc2"] and self.validateIpInput(vals["ipc2"]): self.entry2.insert(0, vals["ipc2"])
-        if vals["ipc3"] and self.validateIpInput(vals["ipc3"]): self.entry3.insert(0, vals["ipc3"])
-        if vals["ipc4"] and self.validateIpInput(vals["ipc4"]): self.entry4.insert(0, vals["ipc4"])
+        if vals != None:
+            if vals["ipc1"] and self.validateIpInput(vals["ipc1"]): self.entry1.insert(0, vals["ipc1"])
+            if vals["ipc2"] and self.validateIpInput(vals["ipc2"]): self.entry2.insert(0, vals["ipc2"])
+            if vals["ipc3"] and self.validateIpInput(vals["ipc3"]): self.entry3.insert(0, vals["ipc3"])
+            if vals["ipc4"] and self.validateIpInput(vals["ipc4"]): self.entry4.insert(0, vals["ipc4"])
 
-        if vals["flIn"] in self.midi_out: self.comboFlIn.set(vals["flIn"])
-        if vals["flOut"] in self.midi_out: self.comboFlOut.set(vals["flOut"])
-        if vals["midasIn"] in self.midi_out: self.comboMidasIn.set(vals["midasIn"])
-        if vals["midasOut"] in self.midi_out: self.comboMidasOut.set(vals["midasOut"])
+            if vals["flIn"] in self.midi_out: self.comboFlIn.set(vals["flIn"])
+            if vals["flOut"] in self.midi_out: self.comboFlOut.set(vals["flOut"])
+            if vals["midasIn"] in self.midi_out: self.comboMidasIn.set(vals["midasIn"])
+            if vals["midasOut"] in self.midi_out: self.comboMidasOut.set(vals["midasOut"])
     
     def saveMemoryValues(self):
         Persistence.saveSettings(
@@ -243,7 +245,3 @@ class GUI:
     def stopCallback(self):
         self.worker_process.terminate()
         self.log.configure(text="Not running")
-
-if __name__ == '__main__':
-    multiprocessing.freeze_support()
-    app = GUI()

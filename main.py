@@ -1,5 +1,6 @@
-import mido
-import time
+from GUI import GUI
+import multiprocessing
 
-
-print(mido.get_output_names())
+if __name__ == '__main__':
+    multiprocessing.freeze_support()
+    app = GUI()
