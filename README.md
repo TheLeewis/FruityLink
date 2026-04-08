@@ -67,6 +67,13 @@ The user interface is made to keep it simple. All you need to do is to insert th
 
 Then simply click "set" and leave the application running in background. You're all set and ready to go.
 
+>[!WARNING]
+>The use of this software may overwrite some of your current mixer configuration on Midas M32. This is because to use some channels as controls, some values associated to them (e.g. fader position, pan, mute state, solo state, name, color, icon) need to be changed.
+>
+>Before doing anything make sure to store all your important configurations to a show memory location on the console or to an external show file.
+>
+>I decline all responsibilities for any data loss or damage coming from the wrong usage of this software or from having ignored this warning.
+
 ## 🧭 Roadmap
 
 - [x] Core fader/panpot controls via OSC
