@@ -23,7 +23,7 @@ While most DAW integrations for the M32 are limited to basic Mackie Control (MCU
 
 ## ✍️ Authors
 
-I'm Luigi a Computer Science and Engineering student specializing in Music and Acoustic Engineering. I'm passionate about music technology and always trying to design and implement new ideas.
+I'm a Computer Science and Engineering student specializing in Music and Acoustic Engineering. I'm passionate about music technology and always trying to design and implement new ideas.
 
 ## ⬇️ Installation
 
@@ -52,7 +52,8 @@ I'm Luigi a Computer Science and Engineering student specializing in Music and A
 
 Remember that the 24 channels (faders, panpot, mute, solo, select) that are mapped as DAW controls are the 17-32 channels and 1-8 mixbus. In this way the first 16 input channels are left for use as recording interface or monitoring, and all the other channels (mixbus 9-16, matrix, Main LR, Main C) remain untouched.<br/>
 
-(Further information on how to configure the midi assign section coming soon)
+>[!WARNING]
+>Further information on how to configure the midi assign section and what to control with it coming soon.
 
 #### FruityLink Configuration
 <p align="center">
@@ -83,6 +84,7 @@ Then simply click "set" and leave the application running in background. You're 
 - [x] Persistence for the GUI parameters
 - [x] Release via single executable file
 - [ ] Mapping for prev/next plugin preset of the plugin in the currently focused window
+- [ ] Properly document the assign section mappings
 - [ ] Automatic assignment of the controls in the assign section via OSC (to avoid having to do it manually)
 
 ## 💬 Contributing
