@@ -1,7 +1,10 @@
 import customtkinter as ctk
+from CTkMessagebox import CTkMessagebox
 from tkinter import ttk
 from PIL import Image
 import multiprocessing
+import threading
+import time
 
 from MidasM32 import MidasM32
 from MidiManager import MidiManager
@@ -235,13 +238,29 @@ class GUI:
         midasMidiIn = self.comboMidasIn.get()
         midasMidiOut = self.comboMidasOut.get()
 
-        self.worker_process = multiprocessing.Process(target=MidasM32, daemon=True, args=(ip, flMidiIn, flMidiOut, midasMidiIn, midasMidiOut, midasMidiOn))
-        self.worker_process.start()
+        msg = CTkMessagebox(title="Confirm", message="This will overwrite some of the current settings loaded on your Midas M32.\nMake sure to save all your important settings in a show memory location or in a separate show file.\nProceed?",
+                            icon="warning", option_1="Ok", option_2="Back", button_color="#E85028", button_hover_color="#FB9244", button_text_color="#000000", width=600, wraplength=500, button_width=200, master=self.app)
 
-        self.saveMemoryValues()
+        if msg.get() == "Ok":
+            self.saveMemoryValues()
+            self.worker_process = multiprocessing.Process(target=MidasM32, daemon=True, args=(ip, flMidiIn, flMidiOut, midasMidiIn, midasMidiOut, midasMidiOn))
+            self.worker_process.start()
 
-        self.log.configure(text="Running")
+            self.log.configure(text="Running")
+
+            t = threading.Thread(target=self.__logErrorDuringInit, daemon=True, args=(10,))
+            t.start()
     
     def stopCallback(self):
         self.worker_process.terminate()
         self.log.configure(text="Not running")
+
+    def __logErrorDuringInit(self, durationSeconds):
+        print(durationSeconds)
+        startTime = time.time()
+
+        while time.time() - startTime < durationSeconds:
+            if self.worker_process.exitcode == 2:
+                # TODO: some error handling here
+                self.log.configure(text="There were some errors. Check the interfaces and try again.")
+                break

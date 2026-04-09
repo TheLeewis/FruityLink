@@ -5,6 +5,7 @@ import argparse
 import threading
 import time
 import socket
+from sys import exit
 
 # The state is managed in the FL studio MIDI script
 # Here only the MIDI-OSC mapping is carried out
@@ -348,52 +349,54 @@ REF_ICONS = "RIC"
 
 class MidasM32:
     def __init__(self, ip, flMidiIn, flMidiOut, midasMidiIn, midasMidiOut, midasMidiOn, inPort=PORT, outPort=PORT):
-        print("started")
-        self.midasMidiOn = midasMidiOn
-        self.midiOutput = mido.open_output(flMidiIn)
-        self.midiInput = mido.open_input(flMidiOut)
+        try:
+            self.midasMidiOn = midasMidiOn
+            self.midiOutput = mido.open_output(flMidiIn)
+            self.midiInput = mido.open_input(flMidiOut)
 
-        if self.midasMidiOn:
-            self.midasMidiInput = mido.open_input(midasMidiIn) # MIDO open
-            self.midasMidiOutput = mido.open_output(midasMidiOut) # MIDO open
-            midi_in_client = threading.Thread(target=self.__directInMidiHandler, daemon=True)
-            midi_in_client.start()
-        
-        midi_out_client = threading.Thread(target=self.__directOutMidiHandler, daemon=True)
-        midi_out_client.start()
+            if self.midasMidiOn:
+                self.midasMidiInput = mido.open_input(midasMidiIn) # MIDO open
+                self.midasMidiOutput = mido.open_output(midasMidiOut) # MIDO open
+                midi_in_client = threading.Thread(target=self.__directInMidiHandler, daemon=True)
+                midi_in_client.start()
+            
+            midi_out_client = threading.Thread(target=self.__directOutMidiHandler, daemon=True)
+            midi_out_client.start()
 
-        # Sender
-        sender_parser = argparse.ArgumentParser()
-        sender_parser.add_argument("--ip", default=ip)
-        sender_parser.add_argument("--port", type=int, default=outPort)
-        
-        args = sender_parser.parse_args()
-        
-        source_port = 63993
-        sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-        sock.bind(('', source_port))
+            # Sender
+            sender_parser = argparse.ArgumentParser()
+            sender_parser.add_argument("--ip", default=ip)
+            sender_parser.add_argument("--port", type=int, default=outPort)
+            
+            args = sender_parser.parse_args()
+            
+            source_port = 63993
+            sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+            sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+            sock.bind(('', source_port))
 
-        self.client = udp_client.SimpleUDPClient(args.ip, args.port)
-        self.client._sock = sock # Force to use the customly crafted socket
+            self.client = udp_client.SimpleUDPClient(args.ip, args.port)
+            self.client._sock = sock # Force to use the customly crafted socket
 
-        client_subscription = threading.Thread(target=self.__periodicSubscription, daemon=True)
-        client_subscription.start()
+            client_subscription = threading.Thread(target=self.__periodicSubscription, daemon=True)
+            client_subscription.start()
 
-        # Receiver
-        recv_parser = argparse.ArgumentParser()
-        recv_parser.add_argument("--ip", default=ip)
-        recv_parser.add_argument("--port", type=int, default=inPort) # Careful using the same port on loopback
+            # Receiver
+            recv_parser = argparse.ArgumentParser()
+            recv_parser.add_argument("--ip", default=ip)
+            recv_parser.add_argument("--port", type=int, default=inPort) # Careful using the same port on loopback
 
-        dispatcher = Dispatcher()
-        dispatcher.map("/ch/*", self.__chHandler) # To check if it works with a non static method
-        dispatcher.map("/bus/*", self.__chHandler)
-        dispatcher.map("/-stat/*", self.__statHandler)
+            dispatcher = Dispatcher()
+            dispatcher.map("/ch/*", self.__chHandler) # To check if it works with a non static method
+            dispatcher.map("/bus/*", self.__chHandler)
+            dispatcher.map("/-stat/*", self.__statHandler)
 
-        args = recv_parser.parse_args()
-        server = osc_server.ThreadingOSCUDPServer(("0.0.0.0", source_port), dispatcher, bind_and_activate=False)
-        server.socket = sock
-        server.serve_forever()
+            args = recv_parser.parse_args()
+            server = osc_server.ThreadingOSCUDPServer(("0.0.0.0", source_port), dispatcher, bind_and_activate=False)
+            server.socket = sock
+            server.serve_forever()
+        except:
+            exit(2)
 
     @staticmethod
     def colorMapping(color):
