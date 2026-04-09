@@ -25,17 +25,54 @@ While most DAW integrations for the M32 are limited to basic Mackie Control (MCU
 
 I'm Luigi a Computer Science and Engineering student specializing in Music and Acoustic Engineering. I'm passionate about music technology and always trying to design and implement new ideas.
 
-
-## 🚀 Usage
-
-Further information coming soon.
-<p align="center">
-  <img src="src/GUI_MAIN.png" width="600">
-</p>
-
 ## ⬇️ Installation
 
-Further information coming soon.
+1. Download the FruityLink executable and keep it wherever you want
+2. Clone the `FL scripts` folder from this repo
+3. Create a folder called `Midas M32` into the path `C:\Users\<username>\Documents\Image-Line\FL Studio\Settings\Hardware`
+4. Copy all the scripts from `FL scripts` to `C:\Users\<username>\Documents\Image-Line\FL Studio\Settings\Hardware\Midas M32`
+
+## 🚀 Usage
+#### DAW Configuration
+<p align="center">
+  <kbd>
+    <img src="src/FLStudio_config.png" width="600">
+  </kbd>
+</p>
+
+1. Create two virtual MIDI interfaces (on Windows you can use for example [loopMIDI](https://www.tobias-erichsen.de/software/loopmidi.html) by Tobias Erichsen)
+2. Assign one interface to the FL Studio input and one to the FL Studio output (in the FL Studio Audio/MIDI settings) along with an arbitrary port number. These ones need to be the same selected later in the FruityLink software as the communication interfaces with the DAW.
+3. Check the "Enable" checkbox
+4. Assign Midas M32 as a controller type (if you do not have this device type, look at the installation instructions up here)
+
+#### Midas M32 Configuration
+(Image coming soon)
+1. Connect the mixer with an ethernet cable to the same LAN of the PC you are using and assign an IP address the way you prefere (static, DHCP, link local)
+2. Connect the mixer also directly to the PC via USB cable/MIDI cable to enable sending/receiving midi
+
+Remember that the 24 channels (faders, panpot, mute, solo, select) that are mapped as DAW controls are the 17-32 channels and 1-8 mixbus. In this way the first 16 input channels are left for use as recording interface or monitoring, and all the other channels (mixbus 9-16, matrix, Main LR, Main C) remain untouched.<br/>
+
+(Further information on how to configure the midi assign section coming soon)
+
+#### FruityLink Configuration
+<p align="center">
+  <kbd>
+    <img src="src/GUI_MAIN.png" width="600">
+  </kbd>
+</p>
+
+Double click on the downloaded executable (.exe) file.<br/>
+
+The user interface is made to keep it simple. All you need to do is to insert the ip address of the MIDAS M32 and select the correct MIDI input/output interfaces to/from the DAW and the mixer respectively.<br/>
+
+Then simply click "set" and leave the application running in background. You're all set and ready to go.
+
+>[!WARNING]
+>The use of this software may overwrite some of your current mixer configuration on Midas M32. This is because to use some channels as controls, some values associated to them (e.g. fader position, pan, mute state, solo state, name, color, icon) need to be changed.
+>
+>Before doing anything make sure to store all your important configurations to a show memory location on the console or to an external show file.
+>
+>I decline all responsibilities for any data loss or damage coming from the wrong usage of this software or from having ignored this warning.
 
 ## 🧭 Roadmap
 
@@ -44,7 +81,7 @@ Further information coming soon.
 - [x] Add feedback syncronization from the software to the controller
 - [x] Add GUI for better user experience
 - [x] Persistence for the GUI parameters
-- [ ] Release via single executable file
+- [x] Release via single executable file
 - [ ] Mapping for prev/next plugin preset of the plugin in the currently focused window
 - [ ] Automatic assignment of the controls in the assign section via OSC (to avoid having to do it manually)
 
