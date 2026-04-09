@@ -23,7 +23,7 @@ While most DAW integrations for the M32 are limited to basic Mackie Control (MCU
 
 ## ✍️ Authors
 
-I'm Luigi a Computer Science and Engineering student specializing in Music and Acoustic Engineering. I'm passionate about music technology and always trying to design and implement new ideas.
+I'm a Computer Science and Engineering student specializing in Music and Acoustic Engineering. I'm passionate about music technology and always trying to design and implement new ideas.
 
 ## ⬇️ Installation
 
