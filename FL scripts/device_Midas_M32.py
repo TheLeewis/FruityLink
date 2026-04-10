@@ -14,9 +14,9 @@ import transport
 import plugins
 import ui
 import time
-from FabFilterProC2Ctrl import FabFilterProC2Ctrl
-from FabFilterProRCtrl import FabFilterProRCtrl
-from FabFilterProQ3Ctrl import FabFilterProQ3Ctrl
+from FruityParametricEQ2Ctrl import FruityParametricEq2Ctrl
+from FruityCompressorCtrl import FruityCompressorCtrl
+from FruityReeverb2Ctrl import FruityReeverb2Ctrl
 
 # TODO: replace python constants with canonical capital names
 
@@ -119,6 +119,12 @@ REF_COMP = "RCM"
 REF_REV = "RVB"
 REF_COLORS = "RCL"
 REF_ICONS = "RIC"
+
+# === MAY BE CHANGED WITH DIFFERENT PLUGINS === #
+EQ = FruityParametricEq2Ctrl
+COMP = FruityCompressorCtrl
+REV = FruityReeverb2Ctrl
+# === MAY BE CHANGED WITH DIFFERENT PLUGINS === #
 
 # All in double precision
 class MidasM32:
@@ -339,47 +345,47 @@ class MidasM32:
                     #== Equalizer Band - (A7) -> 22
                     #== Equalizer Band + (A8) -> 23
                     if eventData.controlNum >= 16 and eventData.controlNum <= 23:
-                        slotIndex = FabFilterProQ3Ctrl.channelHasProQ3(selected)
+                        slotIndex = EQ.channelHasEQ(selected)
                         if slotIndex != None:
-                            currentBand = FabFilterProQ3Ctrl.getCurrentBand(self.eq_selected_bands, selected, slotIndex)
+                            currentBand = EQ.getCurrentBand(self.eq_selected_bands, selected, slotIndex)
 
                             if eventData.controlNum == 16:
-                                FabFilterProQ3Ctrl.setFrequency(selected, slotIndex, eventData.controlVal, currentBand)
+                                EQ.setFrequency(selected, slotIndex, eventData.controlVal, currentBand)
                             elif eventData.controlNum == 17:
-                                FabFilterProQ3Ctrl.setGain(selected, slotIndex, eventData.controlVal, currentBand)
+                                EQ.setGain(selected, slotIndex, eventData.controlVal, currentBand)
                             elif eventData.controlNum == 18:
-                                FabFilterProQ3Ctrl.setQualityFactor(selected, slotIndex, eventData.controlVal, currentBand)
+                                EQ.setQualityFactor(selected, slotIndex, eventData.controlVal, currentBand)
                             elif eventData.controlNum == 19:
-                                FabFilterProQ3Ctrl.setSlope(selected, slotIndex, eventData.controlVal, currentBand)
+                                EQ.setSlope(selected, slotIndex, eventData.controlVal, currentBand)
 
                     #== For compressor: Threshold, Ratio, Attack, Release (Main 4 knobs)
                     #== Other parameters of interest could be Knee, Makeup Gain (Wet Gain)
                     #== Channels CC 24, 25, 26, 27
                     if eventData.controlNum >= 24 and eventData.controlNum <= 27:
-                        slotIndex = FabFilterProC2Ctrl.channelHasProC2(selected)
+                        slotIndex = COMP.channelHasCompressor(selected)
                         if slotIndex != None:
                             if eventData.controlNum == 24:
-                                FabFilterProC2Ctrl.setThreshold(selected, slotIndex, eventData.controlVal)
+                                COMP.setThreshold(selected, slotIndex, eventData.controlVal)
                             elif eventData.controlNum == 25:
-                                FabFilterProC2Ctrl.setRatio(selected, slotIndex, eventData.controlVal)
+                                COMP.setRatio(selected, slotIndex, eventData.controlVal)
                             elif eventData.controlNum == 26:
-                                FabFilterProC2Ctrl.setAttack(selected, slotIndex, eventData.controlVal)
+                                COMP.setAttack(selected, slotIndex, eventData.controlVal)
                             elif eventData.controlNum == 27:
-                                FabFilterProC2Ctrl.setRelease(selected, slotIndex, eventData.controlVal)
+                                COMP.setRelease(selected, slotIndex, eventData.controlVal)
                     
                     #== For reverb: Brightness, Distance, Space, Decay Rate
                     #== Channels CC 28, 29, 30, 31
                     if eventData.controlNum >= 28 and eventData.controlNum <= 31:
-                        slotIndex = FabFilterProRCtrl.channelHasProR(selected)
+                        slotIndex = REV.channelHasReverb(selected)
                         if slotIndex != None:
                             if eventData.controlNum == 28:
-                                FabFilterProRCtrl.setBrightness(selected, slotIndex, eventData.controlVal)
+                                REV.setBrightness(selected, slotIndex, eventData.controlVal)
                             elif eventData.controlNum == 29:
-                                FabFilterProRCtrl.setDistance(selected, slotIndex, eventData.controlVal)
+                                REV.setDistance(selected, slotIndex, eventData.controlVal)
                             elif eventData.controlNum == 30:
-                                FabFilterProRCtrl.setSpace(selected, slotIndex, eventData.controlVal)
+                                REV.setSpace(selected, slotIndex, eventData.controlVal)
                             elif eventData.controlNum == 31:
-                                FabFilterProRCtrl.setDecayRate(selected, slotIndex, eventData.controlVal)    
+                                REV.setDecayRate(selected, slotIndex, eventData.controlVal)    
 
             elif eventData.midiId == midi.MIDI_NOTEON:
                 # Mute (Mapped linearly from note 61 to 85 of the channel 10)
@@ -401,29 +407,29 @@ class MidasM32:
                     elif eventData.note == 1 and not self.fader_flip_active: # Record (A10)
                         transport.record()
                     elif eventData.note == 2: # Enable/Disable Band (A5 Toggle)
-                        slotIndex = FabFilterProQ3Ctrl.channelHasProQ3(selected)
+                        slotIndex = EQ.channelHasEQ(selected)
                         if slotIndex != None:
-                            currentBand = FabFilterProQ3Ctrl.getCurrentBand(self.eq_selected_bands, selected, slotIndex)
-                            FabFilterProQ3Ctrl.toggleBand(selected, slotIndex, currentBand)
+                            currentBand = EQ.getCurrentBand(self.eq_selected_bands, selected, slotIndex)
+                            EQ.toggleBand(selected, slotIndex, currentBand)
                     elif eventData.note == 3 and eventData.velocity == 127: # Scroll between EQ shapes (A6)
-                        slotIndex = FabFilterProQ3Ctrl.channelHasProQ3(selected)
+                        slotIndex = EQ.channelHasEQ(selected)
                         if slotIndex != None:
-                            currentBand = FabFilterProQ3Ctrl.getCurrentBand(self.eq_selected_bands, selected, slotIndex)
-                            FabFilterProQ3Ctrl.scrollEqShapes(selected, slotIndex, currentBand)
+                            currentBand = EQ.getCurrentBand(self.eq_selected_bands, selected, slotIndex)
+                            EQ.scrollEqShapes(selected, slotIndex, currentBand)
                     elif eventData.note == 4 and eventData.velocity == 0: # Equalizer band - (A7)
-                        slotIndex = FabFilterProQ3Ctrl.channelHasProQ3(selected)
+                        slotIndex = EQ.channelHasEQ(selected)
                         if slotIndex != None:
-                            currentBand = FabFilterProQ3Ctrl.getCurrentBand(self.eq_selected_bands, selected, slotIndex)
-                            prevBand = FabFilterProQ3Ctrl.selectPrevBand(currentBand, selected, slotIndex)
+                            currentBand = EQ.getCurrentBand(self.eq_selected_bands, selected, slotIndex)
+                            prevBand = EQ.selectPrevBand(currentBand, selected, slotIndex)
                             self.eq_selected_bands[selected] = {}
                             self.eq_selected_bands[selected][slotIndex] = prevBand
 
                             self.refreshAssignSection()
                     elif eventData.note == 5 and eventData.velocity == 0: # Equalizer band + (A8)
-                        slotIndex = FabFilterProQ3Ctrl.channelHasProQ3(selected)
+                        slotIndex = EQ.channelHasEQ(selected)
                         if slotIndex != None:
-                            currentBand = FabFilterProQ3Ctrl.getCurrentBand(self.eq_selected_bands, selected, slotIndex)
-                            nextBand = FabFilterProQ3Ctrl.selectNextBand(currentBand, selected, slotIndex)
+                            currentBand = EQ.getCurrentBand(self.eq_selected_bands, selected, slotIndex)
+                            nextBand = EQ.selectNextBand(currentBand, selected, slotIndex)
                             self.eq_selected_bands[selected] = {}
                             self.eq_selected_bands[selected][slotIndex] = nextBand
                             
@@ -438,8 +444,8 @@ class MidasM32:
                     elif eventData.note == 8: # None (B5)
                         pass
                     elif eventData.note == 9 and not self.fader_flip_active: # Compressor Style (B6)
-                        slotIndex = FabFilterProC2Ctrl.channelHasProC2(selected)
-                        FabFilterProC2Ctrl.switchCompressorStyle(selected, slotIndex)
+                        slotIndex = COMP.channelHasCompressor(selected)
+                        COMP.switchCompressorStyle(selected, slotIndex)
                     elif eventData.note == 10: # Current plugin preset - (B7)
                         currentWin = self.__getFocusedPlugin()
                         if currentWin["type"] == "instrument":
@@ -657,15 +663,15 @@ class MidasM32:
 
         # Refresh the EQ section
         # TODO: state buttons
-        slotIndex = FabFilterProQ3Ctrl.channelHasProQ3(selected)
+        slotIndex = EQ.channelHasEQ(selected)
         if slotIndex != None:
-            currentBand = FabFilterProQ3Ctrl.getCurrentBand(self.eq_selected_bands, selected, slotIndex)
+            currentBand = EQ.getCurrentBand(self.eq_selected_bands, selected, slotIndex)
 
             # Get Values
-            frequency = FabFilterProQ3Ctrl.getFrequency(selected, slotIndex, currentBand)
-            gain = FabFilterProQ3Ctrl.getGain(selected, slotIndex, currentBand)
-            quality_factor = FabFilterProQ3Ctrl.getQualityFactor(selected, slotIndex, currentBand)
-            slope = FabFilterProQ3Ctrl.getSlope(selected, slotIndex, currentBand)
+            frequency = EQ.getFrequency(selected, slotIndex, currentBand)
+            gain = EQ.getGain(selected, slotIndex, currentBand)
+            quality_factor = EQ.getQualityFactor(selected, slotIndex, currentBand)
+            slope = EQ.getSlope(selected, slotIndex, currentBand)
         else:
             frequency = 0
             gain = 0
@@ -678,13 +684,13 @@ class MidasM32:
         device.midiOutMsg(midi.MIDI_CONTROLCHANGE, channel_direct_map, 19, int(slope*127))
 
         # Refresh the Comp section
-        slotIndex = FabFilterProC2Ctrl.channelHasProC2(selected)
+        slotIndex = COMP.channelHasCompressor(selected)
         if slotIndex != None:
             # Get Values
-            threshold = FabFilterProC2Ctrl.getThreshold(selected, slotIndex)
-            ratio = FabFilterProC2Ctrl.getRatio(selected, slotIndex)
-            attack = FabFilterProC2Ctrl.getAttack(selected, slotIndex)
-            release = FabFilterProC2Ctrl.getRelease(selected, slotIndex)
+            threshold = COMP.getThreshold(selected, slotIndex)
+            ratio = COMP.getRatio(selected, slotIndex)
+            attack = COMP.getAttack(selected, slotIndex)
+            release = COMP.getRelease(selected, slotIndex)
         else:
             threshold = 0
             ratio = 0
@@ -697,13 +703,13 @@ class MidasM32:
         device.midiOutMsg(midi.MIDI_CONTROLCHANGE, channel_direct_map, 27, int(release*127))
 
         # Refresh the Reverb section
-        slotIndex = FabFilterProRCtrl.channelHasProR(selected)
+        slotIndex = REV.channelHasReverb(selected)
         if slotIndex != None:
             # Get Values
-            brightness = FabFilterProC2Ctrl.getBrightness(selected, slotIndex)
-            distance = FabFilterProC2Ctrl.getDistance(selected, slotIndex)
-            space = FabFilterProC2Ctrl.getSpace(selected, slotIndex)
-            decayRate = FabFilterProC2Ctrl.getDecayRate(selected, slotIndex)
+            brightness = REV.getBrightness(selected, slotIndex)
+            distance = REV.getDistance(selected, slotIndex)
+            space = REV.getSpace(selected, slotIndex)
+            decayRate = REV.getDecayRate(selected, slotIndex)
         else:
             brightness = 0
             distance = 0
