@@ -13,7 +13,7 @@
 ## ℹ️ Overview
 
 **FruityLink** is a specialized bridge designed to integrate the **Midas M32** digital console with **FL Studio**.
-While most DAW integrations for the M32 are limited to basic Mackie Control (MCU) on 8 faders, FruityLink unlocks the console's full potential by mapping all **24 motorized faders** and the **lateral assign section** directly to the FL Studio mixer and transport controls.
+While most DAW integrations for the M32 are limited to basic Mackie Control (MCU) on 8 faders, FruityLink unlocks the console's full potential by mapping all **24 motorized faders** and the **lateral assign section** directly to the FL Studio mixer, transport controls and mixer plugins.
 
 #### Key Capabilities:
 
