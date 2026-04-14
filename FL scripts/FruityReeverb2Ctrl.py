@@ -17,32 +17,32 @@ class FruityReeverb2Ctrl(ReverbCtrl):
     
     @staticmethod
     def setBrightness(selected, slotIndex, value):
-        pass
+        plugins.setParamValue(Utils.mapMidiCCTo01(value), 6, selected, slotIndex)
 
     @staticmethod
     def getBrightness(selected, slotIndex):
-        pass
+        return plugins.getParamValue(6, selected, slotIndex)
 
     @staticmethod
     def setDistance(selected, slotIndex, value):
-        pass
+        plugins.setParamValue(Utils.mapMidiCCTo01(value), 4, selected, slotIndex)
 
     @staticmethod
     def getDistance(selected, slotIndex):
-        pass
+        return plugins.getParamValue(4, selected, slotIndex)
 
     @staticmethod
     def setSpace(selected, slotIndex, value):
-        pass
+        plugins.setParamValue(Utils.mapMidiCCTo01(value), 3, selected, slotIndex)
 
     @staticmethod
     def getSpace(selected, slotIndex):
-        pass
+        return plugins.getParamValue(3, selected, slotIndex)
 
     @staticmethod
     def setDecayRate(selected, slotIndex, value):
-        pass
+        plugins.setParamValue(Utils.mapMidiCCTo01(value), 5, selected, slotIndex)
 
     @staticmethod
     def getDecayRate(selected, slotIndex):
-        pass
+        return plugins.getParamValue(5, selected, slotIndex)
