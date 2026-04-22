@@ -304,7 +304,6 @@ class MidasM32:
             self.refreshColor()
 
     def __prevFaderPage(self):
-        print(mixer.trackCount())
         if (self.current_span+1)*24 - 24 > 0:
             self.current_span -= 24
 
@@ -511,11 +510,11 @@ class MidasM32:
             device.midiOutSysex(full_message)
             hw_count+=1
     
-    def refreshColor(self):
+    def refreshColor(self, reset=False):
         totalChannels = mixer.trackCount()
         hw_count = 0
         for i in range(self.current_span + 1, self.current_span + 25):
-            if i <= totalChannels - 2:
+            if not reset and i <= totalChannels - 2:
                 associated = HW_CHANNELS[hw_count]
                 channel_color = REF_COLORS + associated + "BL"
             else:
@@ -544,14 +543,14 @@ class MidasM32:
             device.midiOutSysex(full_message)
             hw_count += 1
     
-    def refreshFadersPositions(self):
+    def refreshFadersPositions(self, reset=False):
         totalChannels = mixer.trackCount()
 
         hw_count = 0
 
         for i in range(self.current_span + 1, self.current_span + 25):
             associated = HW_CHANNELS[hw_count]
-            if i <= totalChannels - 2:
+            if not reset and i <= totalChannels - 2:
                 volume = mixer.getTrackVolume(i)
                 volume = int(volume * max_precision)
 
@@ -593,7 +592,7 @@ class MidasM32:
                 break
             hw_count+=1
 
-    def refreshMute(self):
+    def refreshMute(self, reset=False):
         totalChannels = mixer.trackCount()
 
         hw_count = 0
@@ -602,7 +601,10 @@ class MidasM32:
             if i <= totalChannels - 2:
                 associated = HW_CHANNELS[hw_count]
 
-                mute = mixer.isTrackMuted(i)
+                if not reset:
+                    mute = mixer.isTrackMuted(i)
+                else:
+                    mute = 0
 
                 text = REF_MUTE + associated + str(mute)
 
@@ -616,14 +618,14 @@ class MidasM32:
                 break
             hw_count+=1
 
-    def refreshSolo(self):
+    def refreshSolo(self, reset=False):
         totalChannels = mixer.trackCount()
 
         hw_count = 0
 
         for i in range(self.current_span + 1, self.current_span + 25):
             associated = HW_CHANNELS[hw_count]
-            if i <= totalChannels - 2:
+            if not reset and i <= totalChannels - 2:
                 solo = mixer.isTrackSolo(i)
                 text = REF_SOLO + associated + str(solo)
             else:
@@ -637,14 +639,14 @@ class MidasM32:
             device.midiOutSysex(full_message)
             hw_count+=1
 
-    def refreshPan(self):
+    def refreshPan(self, reset=False):
         totalChannels = mixer.trackCount()
 
         hw_count = 0
 
         for i in range(self.current_span + 1, self.current_span + 25):
             associated = HW_CHANNELS[hw_count]
-            if i <= totalChannels - 2:
+            if not reset and i <= totalChannels - 2:
                 pan = mixer.getTrackPan(i)
                 text = REF_PAN + associated + str(int(pan * max_precision))
             else:
@@ -658,13 +660,13 @@ class MidasM32:
             device.midiOutSysex(full_message)
             hw_count+=1
     
-    def refreshAssignSection(self):
+    def refreshAssignSection(self, reset=False):
         selected = mixer.trackNumber()
 
         # Refresh the EQ section
         # TODO: state buttons
         slotIndex = EQ.channelHasEQ(selected)
-        if slotIndex != None:
+        if not reset and slotIndex != None:
             currentBand = EQ.getCurrentBand(self.eq_selected_bands, selected, slotIndex)
 
             # Get Values
@@ -685,7 +687,7 @@ class MidasM32:
 
         # Refresh the Comp section
         slotIndex = COMP.channelHasCompressor(selected)
-        if slotIndex != None:
+        if not reset and slotIndex != None:
             # Get Values
             threshold = COMP.getThreshold(selected, slotIndex)
             ratio = COMP.getRatio(selected, slotIndex)
@@ -704,7 +706,7 @@ class MidasM32:
 
         # Refresh the Reverb section
         slotIndex = REV.channelHasReverb(selected)
-        if slotIndex != None:
+        if not reset and slotIndex != None:
             # Get Values
             brightness = REV.getBrightness(selected, slotIndex)
             distance = REV.getDistance(selected, slotIndex)
@@ -750,6 +752,21 @@ class MidasM32:
             self.refreshIcons()
             
             self.lock_sync_only_from_sw = False
+    
+    def setDefaultfaderPage(self):
+        self.current_span = 0
+    
+    def setUnloadedState(self):
+        self.lock_sync_only_from_sw = True
+
+        self.refreshFadersPositions(reset=True)
+        self.refreshSelectedChannel()
+        self.refreshMute(reset=True)
+        self.refreshSolo(reset=True)
+        self.refreshPan(reset=True)
+        self.refreshAssignSection(reset=True)
+        
+        self.lock_sync_only_from_sw = False
 
 midas = MidasM32()
 
@@ -759,7 +776,12 @@ def OnMidiMsg(event):
     return True
 
 def OnInit():
+    midas.setDefaultfaderPage()
     midas.refreshAllInit()
 
 def OnRefresh(flags):
+    midas.setDefaultfaderPage()
     midas.refreshAll()
+
+def onDeInit():
+    midas.setUnloadedState()

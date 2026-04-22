@@ -355,8 +355,8 @@ class MidasM32:
             self.midiInput = mido.open_input(flMidiOut)
 
             if self.midasMidiOn:
-                self.midasMidiInput = mido.open_input(midasMidiIn) # MIDO open
-                self.midasMidiOutput = mido.open_output(midasMidiOut) # MIDO open
+                self.midasMidiOutput = mido.open_output(midasMidiIn) # MIDO open
+                self.midasMidiInput = mido.open_input(midasMidiOut) # MIDO open
                 midi_in_client = threading.Thread(target=self.__directInMidiHandler, daemon=True)
                 midi_in_client.start()
             
@@ -395,7 +395,9 @@ class MidasM32:
             server = osc_server.ThreadingOSCUDPServer(("0.0.0.0", source_port), dispatcher, bind_and_activate=False)
             server.socket = sock
             server.serve_forever()
-        except:
+        except Exception as exception:
+            print(exception)
+            print("Outputs:", mido.get_output_names())
             exit(2)
 
     @staticmethod

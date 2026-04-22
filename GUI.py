@@ -172,9 +172,9 @@ class GUI:
             if vals["ipc4"] and self.validateIpInput(vals["ipc4"]): self.entry4.insert(0, vals["ipc4"])
 
             if vals["flIn"] in self.midi_out: self.comboFlIn.set(vals["flIn"])
-            if vals["flOut"] in self.midi_out: self.comboFlOut.set(vals["flOut"])
+            if vals["flOut"] in self.midi_in: self.comboFlOut.set(vals["flOut"])
             if vals["midasIn"] in self.midi_out: self.comboMidasIn.set(vals["midasIn"])
-            if vals["midasOut"] in self.midi_out: self.comboMidasOut.set(vals["midasOut"])
+            if vals["midasOut"] in self.midi_in: self.comboMidasOut.set(vals["midasOut"])
     
     def saveMemoryValues(self):
         Persistence.saveSettings(
