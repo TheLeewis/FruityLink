@@ -88,7 +88,7 @@ Then simply click "set" and leave the application running in background. You're 
 - [X] Add GUI for better user experience
 - [X] Persistence for the GUI parameters
 - [X] Release via single executable file
-- [ ] Enable assign section controls of plugins (Fruity EQ, Comp, Reverb) via MIDI
+- [x] Enable assign section controls of plugins (Fruity EQ, Comp, Reverb) via MIDI
 - [ ] Properly document the assign section mappings
 - [ ] Mapping for prev/next plugin preset of the plugin in the currently focused window
 - [ ] Automatic assignment of the controls in the assign section via OSC (to avoid having to do it manually)
