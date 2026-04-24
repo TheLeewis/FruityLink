@@ -106,7 +106,7 @@ pbk3_chans = {
 
 HW_CHANNELS = ["C17", "C18", "C19", "C20", "C21", "C22", "C23", "C24",
                "C25", "C26", "C27", "C28", "C29", "C30", "C31", "C32",
-               "B01", "B02", "B03", "B04", "B05", "B06", "B07", "B08"]
+               "B01", "B02", "B03", "B04", "B05", "B06", "B07", "B08", "M00"]
 
 REF_SCRIB_STRIP = "RSS"
 REF_FADER = "RFD"
@@ -574,6 +574,16 @@ class MidasM32:
 
         selected = mixer.trackNumber()
 
+        if selected < self.current_span + 1 or selected > self.current_span + 25:
+            text = REF_SELECT + "M00"
+
+            header = [0xF0]
+            body = [ord(c) for c in text]
+            footer = [0xF7]
+
+            full_message = bytes(header + body + footer)
+            device.midiOutSysex(full_message)
+
         for i in range(self.current_span + 1, self.current_span + 25):
             if i <= totalChannels - 2:
                 associated = HW_CHANNELS[hw_count]
@@ -739,19 +749,19 @@ class MidasM32:
             self.lock_sync_only_from_sw = False
     
     def refreshAllInit(self):
-            self.lock_sync_only_from_sw = True
+        self.lock_sync_only_from_sw = True
 
-            self.refreshScribbleStrip()
-            self.refreshFadersPositions()
-            self.refreshSelectedChannel()
-            self.refreshMute()
-            self.refreshSolo()
-            self.refreshPan()
-            self.refreshAssignSection()
-            self.refreshColor()
-            self.refreshIcons()
-            
-            self.lock_sync_only_from_sw = False
+        self.refreshScribbleStrip()
+        self.refreshFadersPositions()
+        self.refreshSelectedChannel()
+        self.refreshMute()
+        self.refreshSolo()
+        self.refreshPan()
+        self.refreshAssignSection()
+        self.refreshColor()
+        self.refreshIcons()
+        
+        self.lock_sync_only_from_sw = False
     
     def setDefaultfaderPage(self):
         self.current_span = 0

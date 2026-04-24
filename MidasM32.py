@@ -333,7 +333,7 @@ channel_sel = 12
 
 HW_CHANNELS = [ "C17", "C18", "C19", "C20", "C21", "C22", "C23", "C24",
                "C25", "C26", "C27", "C28", "C29", "C30", "C31", "C32",
-               "B01", "B02", "B03", "B04", "B05", "B06", "B07", "B08"]
+               "B01", "B02", "B03", "B04", "B05", "B06", "B07", "B08", "M00"]
 
 REF_SCRIB_STRIP = "RSS"
 REF_FADER = "RFD"
@@ -555,6 +555,8 @@ class MidasM32:
                     channel_type = "ch"
                 elif data[0] == "B":
                     channel_type = "bus"
+                elif data[0] == "M":
+                    channel_type = "master"
                 channel_nr = data[1:3]
 
                 data = data[3:]
@@ -573,6 +575,8 @@ class MidasM32:
                     channel_nr = int(channel_nr) - 1
                     if channel_type == "bus":
                         channel_nr = int(channel_nr) + 48
+                    elif channel_type == "master":
+                        channel_nr = 70
                     self.client.send_message(f"/-stat/selidx", channel_nr)
                 
                 #== MUTE Update ==
