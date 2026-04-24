@@ -100,7 +100,7 @@ Then simply click "set" and leave the application running in background. You're 
 
 ## ©️ Copyright
 
-Copyright© 2026.`</br>`
+Copyright© 2026.</br>
 
 #### 1. Permission to View and Copy
 
